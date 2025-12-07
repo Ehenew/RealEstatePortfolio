@@ -1,6 +1,11 @@
-const mongoose = require('mongoose');
+import mongoose, { Model, Schema } from 'mongoose'
+import { ISettings } from '../types'
 
-const settingsSchema = new mongoose.Schema({
+interface ISettingsModel extends Model<ISettings> {
+  getSettings(): Promise<ISettings>;
+}
+
+const settingsSchema = new Schema<ISettings>({
   phone: {
     type: String,
     required: [true, 'Phone number is required']
@@ -50,4 +55,7 @@ settingsSchema.statics.getSettings = async function () {
   return settings;
 };
 
-module.exports = mongoose.model('Settings', settingsSchema);
+const Settings = mongoose.model<ISettings, ISettingsModel>('Settings', settingsSchema);
+
+export default Settings;
+

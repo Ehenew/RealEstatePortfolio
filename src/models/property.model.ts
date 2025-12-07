@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, Model } from 'mongoose';
+import { IProperty } from '../types';
 
-const propertySchema = new mongoose.Schema({
+const propertySchema = new Schema<IProperty>({
   title: {
     type: String,
     required: [true, 'Property title is required'],
@@ -9,7 +10,6 @@ const propertySchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, 'Property description is required'],
     maxlength: [2000, 'Description cannot exceed 2000 characters']
   },
   price: {
@@ -26,16 +26,13 @@ const propertySchema = new mongoose.Schema({
     enum: ['villa', 'apartment', 'townhouse', 'penthouse', 'commercial', 'land']
   },
   bedrooms: {
-    type: String,
-    required: true
+    type: String
   },
   bathrooms: {
-    type: String,
-    required: true
+    type: String
   },
   size: {
-    type: String,
-    required: true
+    type: String
   },
   yearBuilt: {
     type: String
@@ -96,4 +93,7 @@ propertySchema.index({ title: 'text', description: 'text', location: 'text' });
 propertySchema.index({ status: 1, featured: -1 });
 propertySchema.index({ type: 1, price: 1 });
 
-module.exports = mongoose.model('Property', propertySchema);
+const Property: Model<IProperty> = mongoose.model<IProperty>('Property', propertySchema);
+
+export default Property;
+
